@@ -1,2 +1,33 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# CubeMX/project files
+*.ioc text
+*.project text merge=union
+*.cproject text merge=union
+*.mxproject text
+
+# Build outputs
+*.elf binary
+*.bin binary
+*.hex binary
+*.map binary
+*.lst binary
+
+# Object files
+*.o binary
+*.d -binary
+*.su binary
+
+# Don't diff
+*.o -diff
+*.d -diff
+*.su diff
+*.elf -diff
+
+# Source files
+*.c -text
+*.h -text
+*.cpp -text
+*.s -text
+*.ld -text
