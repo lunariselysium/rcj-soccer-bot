@@ -18,11 +18,13 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "usart.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "uart_protocol.h"
+#include <stdlib.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -43,7 +45,8 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
+uint16_t ir_data[16];
+uint16_t ultrasonic_data[4];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -86,8 +89,9 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
-
+  mosaic_send_init(&huart1);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -97,6 +101,12 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+	  for (int i = 0; i < 16; i++) ir_data[i] = (uint16_t)rand();
+	  for (int i = 0; i < 4; i++) ultrasonic_data[i] = (uint16_t)rand();
+	  if (mosaic_send_sensors(ir_data, ultrasonic_data)){
+
+	  }
+	  HAL_Delay(20);
   }
   /* USER CODE END 3 */
 }
