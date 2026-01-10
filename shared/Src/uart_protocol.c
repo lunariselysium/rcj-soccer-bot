@@ -12,15 +12,6 @@ UART_HandleTypeDef *protocol_huart = NULL;
 static sensor_data_callback_t data_callback = NULL;
 static uint8_t expected_sequence = 0;
 
-typedef struct {
-	uint32_t packets_received;
-	uint32_t packets_lost;
-	uint32_t crc_errors;
-	uint32_t timeouts;
-	float avg_latency_ms;
-} protocol_stats_t;
-
-
 static protocol_stats_t stats = {0};
 
 // Mosaic
@@ -58,7 +49,7 @@ bool mosaic_send_sensors(const uint16_t* ir_data, const uint16_t* ultrasonic_dat
 
 
 
-// Fresco
+// Fresco side
 void fresco_receive_init(UART_HandleTypeDef *huart){
 	protocol_huart = huart;
 	expected_sequence = 0;

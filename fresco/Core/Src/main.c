@@ -46,6 +46,7 @@
 
 /* USER CODE BEGIN PV */
 sensor_packet_t rx;
+protocol_stats_t rx_stats;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -156,6 +157,7 @@ void SystemClock_Config(void)
 /* USER CODE BEGIN 4 */
 void on_sensor_data_received(const sensor_packet_t* packet){
 	memcpy(&rx, packet, sizeof(sensor_packet_t));
+	rx_stats = fresco_get_stats();
 }
 /* USER CODE END 4 */
 

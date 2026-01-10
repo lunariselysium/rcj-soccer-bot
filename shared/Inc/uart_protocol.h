@@ -16,6 +16,14 @@ typedef struct {
 } sensor_packet_t;
 #pragma pack(pop)
 
+typedef struct {
+	uint32_t packets_received;
+	uint32_t packets_lost;
+	uint32_t crc_errors;
+	uint32_t timeouts;
+	float avg_latency_ms;
+} protocol_stats_t;
+
 
 #define HEADER_BYTE 0xAA
 #define FOOTER_BYTE 0x55
@@ -39,6 +47,10 @@ void fresco_poll(void);
 bool fresco_check_for_data(uint32_t timeout_ms);
 
 
+
 // Utils
 uint8_t calculate_crc8(const uint8_t*data, size_t length);
 bool validate_packet(const sensor_packet_t* packet);
+
+protocol_stats_t fresco_get_stats(void);
+void fresco_reset_stats(void);
