@@ -20,6 +20,7 @@
 #include "main.h"
 #include "adc.h"
 #include "dma.h"
+#include "i2c.h"
 #include "usart.h"
 #include "gpio.h"
 
@@ -97,11 +98,13 @@ int main(void)
   MX_DMA_Init();
   MX_USART1_UART_Init();
   MX_ADC1_Init();
+  MX_I2C2_Init();
   /* USER CODE BEGIN 2 */
   mosaic_send_init(&huart1);
   HAL_ADC_Start_DMA(&hadc1, (uint32_t*)ir_data, SENSOR_COUNT);
 
   /* USER CODE END 2 */
+
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
@@ -163,7 +166,6 @@ void SystemClock_Config(void)
     Error_Handler();
   }
 }
-
 
 /* USER CODE BEGIN 4 */
 void LED_Update(void){
