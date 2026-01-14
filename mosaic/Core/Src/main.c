@@ -18,6 +18,8 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "adc.h"
+#include "dma.h"
 #include "usart.h"
 #include "gpio.h"
 
@@ -45,12 +47,14 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-uint16_t ir_data[16];
+#define SENSOR_COUNT 16
+volatile uint16_t ir_data[16];
 uint16_t ultrasonic_data[4];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
+void LED_Update(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -89,11 +93,13 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
   MX_USART1_UART_Init();
+  MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
   mosaic_send_init(&huart1);
   /* USER CODE END 2 */
-
+  HAL_ADC_Start_DMA(&hadc1, (uint32_t*)ir_data, SENSOR_COUNT);
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
@@ -101,7 +107,7 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	  for (int i = 0; i < 16; i++) ir_data[i] = (uint16_t)rand();
+	  LED_Update();
 	  for (int i = 0; i < 4; i++) ultrasonic_data[i] = (uint16_t)rand();
 	  if (mosaic_send_sensors(ir_data, ultrasonic_data)){
 
@@ -156,6 +162,88 @@ void SystemClock_Config(void)
   }
 }
 
+void LED_Update(void){
+	int min=16;
+		  for(int i=0;i<SENSOR_COUNT;i++){
+			  if(ir_data[i]<4095){
+				  if(min==17){
+					  min=i;
+				  }
+				  if (ir_data[i]<ir_data[min]){
+					  min=i;
+				  }
+			  }
+		  }
+		  switch (min){
+		  case 16:
+			  break;
+		  case 0:
+			  HAL_GPIO_WritePin(LED0_GPIO_Port, LED0_Pin, RESET);
+			  break;
+		  case 1:
+			  HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, RESET);
+			  break;
+		  case 2:
+			  HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, RESET);
+			  break;
+		  case 3:
+			  HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, RESET);
+			  break;
+		  case 4:
+			  HAL_GPIO_WritePin(LED4_GPIO_Port, LED4_Pin, RESET);
+			  break;
+		  case 5:
+			  HAL_GPIO_WritePin(LED5_GPIO_Port, LED5_Pin, RESET);
+			  break;
+		  case 6:
+			  HAL_GPIO_WritePin(LED6_GPIO_Port, LED6_Pin, RESET);
+			  break;
+		  case 7:
+			  HAL_GPIO_WritePin(LED7_GPIO_Port, LED7_Pin, RESET);
+			  break;
+		  case 8:
+			  HAL_GPIO_WritePin(LED8_GPIO_Port, LED8_Pin, RESET);
+			  break;
+		  case 9:
+			  HAL_GPIO_WritePin(LED9_GPIO_Port, LED9_Pin, RESET);
+			  break;
+		  case 10:
+			  HAL_GPIO_WritePin(LED10_GPIO_Port, LED10_Pin, RESET);
+			  break;
+		  case 11:
+			  HAL_GPIO_WritePin(LED11_GPIO_Port, LED11_Pin, RESET);
+			  break;
+		  case 12:
+			  HAL_GPIO_WritePin(LED12_GPIO_Port, LED12_Pin, RESET);
+			  break;
+		  case 13:
+			  HAL_GPIO_WritePin(LED13_GPIO_Port, LED13_Pin, RESET);
+			  break;
+		  case 14:
+			  HAL_GPIO_WritePin(LED14_GPIO_Port, LED14_Pin, RESET);
+			  break;
+		  case 15:
+			  HAL_GPIO_WritePin(LED15_GPIO_Port, LED15_Pin, RESET);
+			  break;
+		  }
+		  HAL_Delay(50);
+		  HAL_GPIO_WritePin(LED0_GPIO_Port, LED0_Pin, SET);
+		  HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, SET);
+		  HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, SET);
+		  HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, SET);
+		  HAL_GPIO_WritePin(LED4_GPIO_Port, LED4_Pin, SET);
+		  HAL_GPIO_WritePin(LED5_GPIO_Port, LED5_Pin, SET);
+		  HAL_GPIO_WritePin(LED6_GPIO_Port, LED6_Pin, SET);
+		  HAL_GPIO_WritePin(LED7_GPIO_Port, LED7_Pin, SET);
+		  HAL_GPIO_WritePin(LED8_GPIO_Port, LED8_Pin, SET);
+		  HAL_GPIO_WritePin(LED9_GPIO_Port, LED9_Pin, SET);
+		  HAL_GPIO_WritePin(LED10_GPIO_Port, LED10_Pin, SET);
+		  HAL_GPIO_WritePin(LED11_GPIO_Port, LED11_Pin, SET);
+		  HAL_GPIO_WritePin(LED12_GPIO_Port, LED12_Pin, SET);
+		  HAL_GPIO_WritePin(LED13_GPIO_Port, LED13_Pin, SET);
+		  HAL_GPIO_WritePin(LED14_GPIO_Port, LED14_Pin, SET);
+		  HAL_GPIO_WritePin(LED15_GPIO_Port, LED15_Pin, SET);
+}
 /* USER CODE BEGIN 4 */
 
 /* USER CODE END 4 */

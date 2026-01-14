@@ -19,7 +19,7 @@ void mosaic_send_init(UART_HandleTypeDef *huart){
 	protocol_huart = huart;
 }
 
-bool mosaic_send_sensors(const uint16_t* ir_data, const uint16_t* ultrasonic_data){
+bool mosaic_send_sensors(const volatile uint16_t* ir_data, const volatile uint16_t* ultrasonic_data){
 	if (!protocol_huart || !ir_data || !ultrasonic_data){
 		return false;
 	}
@@ -86,7 +86,7 @@ bool fresco_check_for_data(uint32_t timeout_ms){
 	}
 
 	uint8_t rx_buffer[FRAME_SIZE - 1];
-	status = HAL_UART_Receive(protocol_huart, rx_buffer, FRAME_SIZE, 50);
+	status = HAL_UART_Receive(protocol_huart, rx_buffer, FRAME_SIZE - 1, 50);
 	if (status != HAL_OK){
 		if (status == HAL_TIMEOUT){
 					stats.timeouts++;

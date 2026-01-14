@@ -37,7 +37,7 @@ typedef void (*sensor_data_callback_t)(const sensor_packet_t* packet);
 
 // Mosaic side
 void mosaic_send_init(UART_HandleTypeDef *huart);
-bool mosaic_send_sensors(const uint16_t* ir_data, const uint16_t* ultrasonic_data);
+bool mosaic_send_sensors(const volatile uint16_t* ir_data, const volatile uint16_t* ultrasonic_data);
 
 
 // Fresco side
